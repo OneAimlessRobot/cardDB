@@ -274,7 +274,48 @@ void removeFromBSTreeComp(BSTreeComp* tree,void* elem){
 			memset(node->mem,0,tree->elemSize);
 			memcpy(node->mem,minNodeHere->mem,tree->elemSize);
 			linkSubtree(tree,minNodeHere->right);
-			destroyBSTNode(minNodeHere);
+
+void printIntBSTreeInfixComp(BSTreeComp*tree){
+
+
+
+	if(!tree->root){
+
+		return;
+	}
+
+	stackList*stck= initDLStack(sizeof(BSTNode));
+	BSTNode* node=tree->root;
+	pushDLStack(stck,(node=tree->root));
+	while(node->left){
+	
+		pushDLStack(stck,node->left);
+		node=node->left;
+		
+	}
+	while(!isEmptyDLStack(stck)){
+		BSTNode* node=popDLStack(stck);
+		printf("%d\n",*(int*)(node->mem));
+		BSTNode*it=node;
+		if(it){
+			if(it->right){
+			pushDLStack(stck,it->right);
+			it=it->right;
+			while(it->left){
+				
+				pushDLStack(stck,it->left);
+				it=it->left;
+			}
+			
+		
+		}
+		free(node);
+		}
+	
+	}
+	destroyDLStack(stck);
+
+}			destroyBSTNode(minNodeHere);
 			
 			}
 		tree->currSize--;
@@ -322,47 +363,6 @@ void printIntBSTreeDepthComp(BSTreeComp*tree){
 }
 
 
-void printIntBSTreeInfixComp(BSTreeComp*tree){
-
-
-
-	if(!tree->root){
-
-		return;
-	}
-
-	stackList*stck= initDLStack(sizeof(BSTNode));
-	BSTNode* node=tree->root;
-	pushDLStack(stck,(node=tree->root));
-	while(node->left){
-	
-		pushDLStack(stck,node->left);
-		node=node->left;
-		
-	}
-	while(!isEmptyDLStack(stck)){
-		BSTNode* node=popDLStack(stck);
-		printf("%d\n",*(int*)(node->mem));
-		BSTNode*it=node;
-		if(it){
-			if(it->right){
-			pushDLStack(stck,it->right);
-			it=it->right;
-			while(it->left){
-				
-				pushDLStack(stck,it->left);
-				it=it->left;
-			}
-			
-		
-		}
-		free(node);
-		}
-	
-	}
-	destroyDLStack(stck);
-
-}
 void printIntBSTreeBreadthComp(BSTreeComp*tree){
 
 	if(!tree->root){

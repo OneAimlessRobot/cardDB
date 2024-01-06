@@ -9,10 +9,13 @@ u_int64_t age,weight,height;
 
 }card;
 
+int compareCards(void* arg1,void* arg2);
 card* initCard(char name[CARDSMALLFIELDSIZE],char type[CARDSMALLFIELDSIZE], char build[CARDLARGEFIELDSIZE], char desc[CARDLARGEFIELDSIZE],u_int64_t age, u_int64_t weight, u_int64_t height);
 char* printPrettyCard(card* collectible);
 card* destroyCard(card** collectible);
-card* fscanCard(FILE* fstream);
-card* fprintCard(card* collectible,FILE* fstream);
+card* fscanCard(int fd);
+card* fprintCard(card* collectible,int fd);
+
+extern comparator cardCmp;
 
 #endif

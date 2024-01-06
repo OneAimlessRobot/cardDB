@@ -1,9 +1,7 @@
-
 #include "../Includes/preprocessor.h"
 #include "../Includes/nodes.h"
 #include "../Includes/auxFuncs.h"
 #include "../Includes/doublelist.h"
-
 #include "../Includes/stackList.h"
 
 stackList* initDLStack(u_int64_t elemSize){

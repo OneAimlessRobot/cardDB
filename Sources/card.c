@@ -1,4 +1,5 @@
 #include "../Includes/preprocessor.h"
+#include "../Includes/comparator.h"
 #include "../Includes/card.h"
 /*typedef struct card{
 
@@ -7,6 +8,18 @@ u_int64_t age,weight,height;
 
 }card;
 */
+
+int compareCards(void* arg1,void* arg2){
+	card* card1= (card*) arg1;
+	card* card2= (card*) arg2;
+	
+	return memcmp(card1->name,card2->name,CARDSMALLFIELDSIZE);
+
+
+}
+
+comparator cardCmp={compareCards};
+
 card* initCard(char name[CARDSMALLFIELDSIZE],char type[CARDSMALLFIELDSIZE], char build[CARDLARGEFIELDSIZE], char desc[CARDLARGEFIELDSIZE],u_int64_t age, u_int64_t weight, u_int64_t height){
 
 	card* result= malloc(sizeof(card));
@@ -53,10 +66,10 @@ char* printPrettyCard(card* collectible){
 }
 
 
-card* fscanCard(FILE* fstream){
+card* fscanCard(int fd){
 
 	card* result= initEmptyCard();
-	fscanf(fstream,"%lu%lu%lu%[^;];%[^;];%[^;];%[^;];",&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc);
+	fscanf(fstream,"%lu%lu%lu\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n",&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc);
 	return result;
 
 
