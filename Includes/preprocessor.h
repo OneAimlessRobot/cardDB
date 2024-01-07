@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <time.h>
+#include "auxFuncs.h"
 #include "comparator.h"
 #include "card.h"
 #endif

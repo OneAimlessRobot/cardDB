@@ -1,4 +1,5 @@
 #include "../Includes/preprocessor.h"
+#include "../Includes/auxFuncs.h"
 #include "../Includes/comparator.h"
 #include "../Includes/card.h"
 /*typedef struct card{
@@ -66,10 +67,14 @@ char* printPrettyCard(card* collectible){
 }
 
 
-card* fscanCard(int fd){
+card* fscanCard(FILE* fstream){
 
 	card* result= initEmptyCard();
-	fscanf(fstream,"%lu%lu%lu\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n",&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc);
+	fscanf(fstream,"%lu%lu%lu%s%s%s%s",&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc);
+	removeUnderscoreChars(result->name,CARDSMALLFIELDSIZE);
+	removeUnderscoreChars(result->type,CARDSMALLFIELDSIZE);
+	removeUnderscoreChars(result->build,CARDLARGEFIELDSIZE);
+	removeUnderscoreChars(result->desc,CARDLARGEFIELDSIZE);
 	return result;
 
 
@@ -77,15 +82,20 @@ card* fscanCard(int fd){
 
 }
 
-card* fprintCard(card* collectible,FILE* fstream){
+void fprintCard(card* collectible,FILE* fstream){
 	
-	fprintf(fstream,"%lu\n%lu\n%lu\n%s;\n%s;\n%s;\n%s;\n",collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc);
+	removeSpaceChars(collectible->name,CARDSMALLFIELDSIZE);
+	removeSpaceChars(collectible->type,CARDSMALLFIELDSIZE);
+	removeSpaceChars(collectible->build,CARDLARGEFIELDSIZE);
+	removeSpaceChars(collectible->desc,CARDLARGEFIELDSIZE);
+	fprintf(fstream,"%lu\n%lu\n%lu\n%s\n%s\n%s\n%s\n",collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc);
 
 
 }
-card* destroyCard(card** collectible){
+void destroyCard(card** collectible){
 
 	free(*collectible);
 	*collectible=NULL;
 
 }
+

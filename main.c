@@ -7,46 +7,57 @@
 int main(int argc, char ** argv){
 
 	
+	for(int i=0;i<5;i++){
 	int fdtest= open(CARDS_PATH,O_RDWR | O_CREAT | O_APPEND,0777);
-	if(fdtest==-1){
-		
-		perror("Ficheiro não aberto!!!!!\n");
+	FILE* testCard= fdopen(fdtest,"a+");
+	if(!testCard||fdtest==-1){
+		close(fdtest);
+		perror("Ficheiro nao aberto no loop!!!\n");
 		exit(-1);
 	}
 	int fddump= open(CARDS_DUMP_PATH,O_RDWR | O_CREAT | O_TRUNC,0777);
-	
-	if(fddump==-1){
-		
-		perror("Ficheiro não aberto!!!!!\n");
-		close(fdtest);
+	FILE*dumpCard= fdopen(fddump,"a+");
+	if(!dumpCard||fddump==-1){
+		fclose(testCard);
+		perror("Ficheiro nao aberto no loop!!!\n");
 		exit(-1);
 	}
-	FILE *testCard= fdopen(fdtest,"a+");
-	FILE *dumpCard= fdopen(fddump,"w+");
-	for(int i=0;i<1;i++){
 	fseek(testCard,0,SEEK_SET);
 	card* collectible= fscanCard(testCard);
 	char* strCard=printPrettyCard(collectible);
 	printf("%s\n",strCard);
 	free(strCard);
 	fprintCard(collectible,dumpCard);
-	fsync(fddump);
 	destroyCard(&collectible);
-
-	card* collectible2= fscanCard(dumpCard);
-	char* strCard2=printPrettyCard(collectible2);
-	printf("%s\n",strCard2);
-	free(strCard2);
 	
-	fprintCard(collectible2,testCard);
-	fsync(fdtest);
-	destroyCard(&collectible2);
-	
-	}
-	fclose(testCard);
 	fclose(dumpCard);
-	close(fdtest);
-	close(fddump);
-
+	fclose(testCard);
+	
+	fdtest= open(CARDS_PATH,O_RDWR | O_CREAT | O_APPEND,0777);
+	testCard= fdopen(fdtest,"a+");
+	if(!testCard||fdtest==-1){
+		close(fdtest);
+		perror("Ficheiro nao aberto no loop!!!\n");
+		exit(-1);
+	}
+	fddump= open(CARDS_DUMP_PATH,O_RDWR | O_CREAT | O_TRUNC,0777);
+	dumpCard= fdopen(fddump,"a+");
+	if(!dumpCard||fddump==-1){
+		fclose(testCard);
+		perror("Ficheiro nao aberto no loop!!!\n");
+		exit(-1);
+	}
+	fseek(dumpCard,0,SEEK_SET);
+	collectible= fscanCard(testCard);
+	strCard=printPrettyCard(collectible);
+	printf("%s\n",strCard);
+	free(strCard);
+	fprintCard(collectible,dumpCard);
+	destroyCard(&collectible);
+	
+	fclose(dumpCard);
+	fclose(testCard);
+	}
+	
 	return 0;
 }

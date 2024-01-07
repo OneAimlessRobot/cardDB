@@ -16,6 +16,30 @@ double genRanddouble(double min, double max){
 
 }
 
+void removeSpaceChars(char* buff, u_int64_t length){
+
+	for(int i=0;i<length&&length>0;i++){
+
+		if(buff[i]==' '){
+
+			buff[i]='_';
+		}
+
+	}
+
+}
+void removeUnderscoreChars(char* buff, u_int64_t length){
+
+	for(int i=0;i<length&&length>0;i++){
+
+		if(buff[i]=='_'){
+
+			buff[i]=' ';
+		}
+
+	}
+
+}
 int genRandInt(int min, int max) {
     if (max < min) {
         fprintf(stderr, "Error: max must be greater than or equal to min\n");
