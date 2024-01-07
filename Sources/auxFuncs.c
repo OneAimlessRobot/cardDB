@@ -1,6 +1,9 @@
 #include "../Includes/preprocessor.h"
 #include "../Includes/auxFuncs.h"
 
+
+//char whitespacechars[]=  {'\n',' ','\r','\f','\t','\v'};
+char whitespacechars[]=  {'\n',' ','\r','\f','\t','\v'};
 double genRanddouble(double min, double max){
 
     if (max < min) {

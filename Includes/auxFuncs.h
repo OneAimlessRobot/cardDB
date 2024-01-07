@@ -1,7 +1,7 @@
 #ifndef AUXFUNCS_H
 #define AUXFUNCS_H
 
-
+extern char whitespacechars[];
 
 char* randStr(int size);
 char** randStrArr(int sizeOfStrs,int size);

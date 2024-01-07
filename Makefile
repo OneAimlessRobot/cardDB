@@ -1,8 +1,8 @@
 BINARY= cardDB
 
 LDLIBS=  -lm
-INCLUDE= ./Includes .
-SOURCES= . ./Sources
+INCLUDE= ./Includes . ./cmdModules/Includes
+SOURCES= . ./Sources ./cmdModules/Sources
 RESDIR= ./resources
  
 CURRDIR=echo `pwd`

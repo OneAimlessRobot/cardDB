@@ -31,6 +31,7 @@ treeIt* initTreeItComp(BSTreeComp* tree){
 	
 	treeIt* result= malloc(sizeof(treeIt));
 	result->tree= tree;
+	result->stack=NULL;
 	rewindTreeItComp(result);
         return result;
 
@@ -43,12 +44,13 @@ int hasNextTreeItComp(treeIt*it){
 
 }
 void rewindTreeItComp(treeIt*it){
-	
+	if(it->stack){
 	destroyDLStack(it->stack);
-	
+	}
 	it->stack= initDLStack(sizeof(BSTNode));
+	printf("%p %p %p\n",it, it->tree, it->tree->root);
 	BSTNode* node=it->tree->root;
-	pushDLStack(it->stack,(node=it->tree->root));
+	pushDLStack(it->stack,it->tree->root);
 	while(node->left){
 	
 		pushDLStack(it->stack,node->left);
@@ -61,6 +63,6 @@ void destroyTreeIt(treeIt* it){
 
 	destroyDLStack(it->stack);
 	it->stack=NULL;
-	
+	free(it);
 
 }

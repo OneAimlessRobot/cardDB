@@ -3,7 +3,7 @@
 
 typedef struct htiterator{
 
-dliterator* currIt;
+dliteratorcomp* currIt;
 u_int64_t firstpos,lastpos,currpos;
 hashtablecomp* table;
 
