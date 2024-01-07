@@ -110,10 +110,10 @@ void addCardToDataBase(carddatabase* db,card* collectible){
 
 void remCardFromDataBase(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 	
-	if(db->numOfCards){
-	
-		db->numOfCards--;
-	}
+	card tmp= {{0},{0},{0},{0},0,0,0};
+	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
+	removeFromBSTreeComp(db->storage,(void*)&tmp);
+	db->numOfCards--;
 
 }
 
@@ -137,13 +137,16 @@ void printDataBase(carddatabase* db){
 
 void printDataBaseCard(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 
-	card tmp= {name,{0},{0},{0},0,0,0};
+	card tmp= {{0},{0},{0},{0},0,0,0};
+	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
 	card* found=(card*)findInBSTreeComp(db->storage, &tmp);
 	if(!found){
-		printf("No such card!!!\n");
+		printf("No such card!!! %s N existe\n",tmp.name);
 		return;
 	}
-	printPrettyCard(found);
+	char* strCard=printPrettyCard(found);
+	printf("%s\n",strCard);
+	free(strCard);
 
 
 }

@@ -14,6 +14,7 @@
 #include <pthread.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
 #include <limits.h>
 #include <time.h>
 #include "auxFuncs.h"

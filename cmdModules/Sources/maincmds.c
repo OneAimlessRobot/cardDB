@@ -52,7 +52,7 @@ void load(int64_t argc,int* toExit, void** argv){
 void save(int64_t argc,int* toExit, void** argv){
 	if(loaded){
 
-
+		saveDataBase(cards);
 	}
 	else{
 
@@ -61,9 +61,13 @@ void save(int64_t argc,int* toExit, void** argv){
 }
 
 void printcard(int64_t argc,int* toExit, void** argv){
+	
 	if(loaded){
-
-
+		fflush(stdin);
+		char name[CARDSMALLFIELDSIZE]={0};
+		fscanf(stdin,"%[^;];",name);
+		printf("Inseriste %s\n",name);
+		printDataBaseCard(cards,name);
 	}
 	else{
 
@@ -73,8 +77,36 @@ void printcard(int64_t argc,int* toExit, void** argv){
 
 void addcard(int64_t argc,int* toExit, void** argv){
         if(loaded){
+		card* addedcard=malloc(sizeof(card));
+		memset(addedcard->name,0,CARDSMALLFIELDSIZE+1);
+		memset(addedcard->type,0,CARDSMALLFIELDSIZE+1);
+		memset(addedcard->build,0,CARDLARGEFIELDSIZE+1);
+		memset(addedcard->desc,0,CARDLARGEFIELDSIZE+1);
+		fprintf(stdout,"(Para os primeiros 4 campos, tudo e lido ate se encontrar um ';')\n");
 
+		fprintf(stdout,"insere aqui o nome (termina em ';') (max 127):\n");
+		fscanf(stdin,"%[^;];",addedcard->name);
 
+		fprintf(stdout,"insere aqui o tipo (termina em ';') (max 127):\n");
+		fscanf(stdin,"%[^;];",addedcard->type);
+
+		fprintf(stdout,"insere aqui a build (termina em ';') (max 10000):\n");
+		fscanf(stdin,"%[^;];",addedcard->build);
+
+		fprintf(stdout,"insere aqui a descricao (termina em ';') (max 10000):\n");
+		fscanf(stdin,"%[^;];",addedcard->desc);
+
+		fprintf(stdout,"insere aqui a idade (anos):");
+		fscanf(stdin,"%lu",&addedcard->age);
+
+		fprintf(stdout,"insere aqui a altura (cm):");
+		fscanf(stdin,"%lu",&addedcard->height);
+
+		fprintf(stdout,"insere aqui a massa (kg):");
+		fscanf(stdin,"%lu",&addedcard->weight);
+
+		addCardToDataBase(cards,addedcard);
+		free(addedcard);
 	}
 	else{
 
@@ -84,8 +116,12 @@ void addcard(int64_t argc,int* toExit, void** argv){
 
 void remcard(int64_t argc,int* toExit, void** argv){
         if(loaded){
-
-
+		
+		fflush(stdin);
+		char name[CARDSMALLFIELDSIZE]={0};
+		fscanf(stdin,"%[^;];",name);
+		printf("Inseriste %s\n",name);
+		remCardFromDataBase(cards,name);
 	}
 	else{
 
