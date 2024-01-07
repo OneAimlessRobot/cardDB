@@ -61,8 +61,8 @@ void save(int64_t argc,int* toExit, void** argv){
 }
 
 void printcard(int64_t argc,int* toExit, void** argv){
-	
-	if(loaded){
+       	
+	if(loaded&&cards->storage->currSize){
 		fflush(stdin);
 		char name[CARDSMALLFIELDSIZE]={0};
 		fscanf(stdin,"%[^;];",name);
@@ -70,8 +70,15 @@ void printcard(int64_t argc,int* toExit, void** argv){
 		printDataBaseCard(cards,name);
 	}
 	else{
-
+		
+		if(!loaded){
 		fprintf(stderr,"Cartas nao carregadas!!!!\n");
+		}
+		else if(!cards->storage->currSize){
+
+		fprintf(stderr,"Não existem cartas!!!!\n");
+		
+		}
 	}
 }
 
@@ -115,7 +122,7 @@ void addcard(int64_t argc,int* toExit, void** argv){
 }
 
 void remcard(int64_t argc,int* toExit, void** argv){
-        if(loaded){
+        if(loaded&&cards->storage->currSize){
 		
 		fflush(stdin);
 		char name[CARDSMALLFIELDSIZE]={0};
@@ -124,20 +131,33 @@ void remcard(int64_t argc,int* toExit, void** argv){
 		remCardFromDataBase(cards,name);
 	}
 	else{
-
+		
+		if(!loaded){
 		fprintf(stderr,"Cartas nao carregadas!!!!\n");
+		}
+		else if(!cards->storage->currSize){
+
+		fprintf(stderr,"Não existem cartas!!!!\n");
+		
+		}
 	}
 
 }
 
 void printcards(int64_t argc,int* toExit, void** argv){
-       	if(loaded){
+       	if(loaded&&cards->storage->currSize){
 
 		printDataBase(cards);
 	}
 	else{
-
+		if(!loaded){
 		fprintf(stderr,"Cartas nao carregadas!!!!\n");
+		}
+		else if(!cards->storage->currSize){
+
+		fprintf(stderr,"Não existem cartas!!!!\n");
+		
+		}
 	}
 
 }

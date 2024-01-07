@@ -112,8 +112,11 @@ void remCardFromDataBase(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 	
 	card tmp= {{0},{0},{0},{0},0,0,0};
 	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
+	u_int64_t size=db->storage->currSize;
 	removeFromBSTreeComp(db->storage,(void*)&tmp);
+	if(db->storage->currSize!=size){
 	db->numOfCards--;
+	}
 
 }
 
@@ -168,7 +171,7 @@ void saveDataBase(carddatabase* db){
 	}
 	u_int64_t numOfCards= db->numOfCards;
 	fprintf(saveDb,"%lu\n\n",numOfCards);
-	
+	if(db->storage->currSize){
 	treeIt* it= initTreeItComp(db->storage);
 	while(hasNextTreeItComp(it)){
 		
@@ -176,9 +179,7 @@ void saveDataBase(carddatabase* db){
 		fprintCard((card*)nextElem,saveDb);
 	}
 	destroyTreeIt(it);
-
-	destroyBSTreeComp(db->storage);
-	free(db);
+	}
 	fclose(saveDb);
 	
 

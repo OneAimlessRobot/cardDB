@@ -46,19 +46,19 @@ static int isLeaf(BSTNode* node){
 
 	return !node->left && !node->right;
 }
-static void destroyBSTNode(BSTNode* node){
+static void destroyBSTNode(BSTNode** node){
 
-	if(node->left){
-	node->left=NULL;
+	if((*node)->left){
+	(*node)->left=NULL;
 	}
-	if(node->right){
-	node->right=NULL;
+	if((*node)->right){
+	(*node)->right=NULL;
 	}
 	
-	free(node->mem);
-	node->mem=NULL;
-	free(node);
-	node=NULL;
+	free((*node)->mem);
+	(*node)->mem=NULL;
+	free(*node);
+	(*node)=NULL;
 	
 }
 static void clearBSTNode(BSTNode* node){
@@ -241,12 +241,12 @@ void removeFromBSTreeComp(BSTreeComp* tree,void* elem){
 			
 			if(tree->lastStep->isLeft){
 			tree->lastStep->parent->left=NULL;
-			destroyBSTNode(node);
+			destroyBSTNode(&node);
 			
 			}
 			else{
 			tree->lastStep->parent->right=NULL;
-			destroyBSTNode(node);
+			destroyBSTNode(&node);
 			
 			}
 
@@ -254,14 +254,14 @@ void removeFromBSTreeComp(BSTreeComp* tree,void* elem){
 		else if(!node->left&&node->right){
 
 			linkSubtree(tree,node->right);
-			destroyBSTNode(node);
+			destroyBSTNode(&node);
 
 
 		}
 		else if(!node->right&&node->left){
 
 			linkSubtree(tree,node->left);
-			destroyBSTNode(node);
+			destroyBSTNode(&node);
 		}
 		else{
 			BSTNode* minNodeHere=node;
@@ -413,8 +413,7 @@ static void destroyBSTreeAux(BSTNode* node){
 	destroyBSTreeAux(node->left);
 	}
 
-	destroyBSTNode(node);
-
+	destroyBSTNode(&node);
 }
 void destroyBSTreeComp(BSTreeComp* tree){
 
