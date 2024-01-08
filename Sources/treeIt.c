@@ -48,7 +48,6 @@ void rewindTreeItComp(treeIt*it){
 	destroyDLStack(it->stack);
 	}
 	it->stack= initDLStack(sizeof(BSTNode));
-	printf("%p %p %p\n",it, it->tree, it->tree->root);
 	BSTNode* node=it->tree->root;
 	pushDLStack(it->stack,it->tree->root);
 	while(node->left){

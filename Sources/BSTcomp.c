@@ -274,7 +274,13 @@ void removeFromBSTreeComp(BSTreeComp* tree,void* elem){
 			memset(node->mem,0,tree->elemSize);
 			memcpy(node->mem,minNodeHere->mem,tree->elemSize);
 			linkSubtree(tree,minNodeHere->right);
-
+			destroyBSTNode(&minNodeHere);
+			
+			}
+		tree->currSize--;
+		}
+	}
+}
 void printIntBSTreeInfixComp(BSTreeComp*tree){
 
 
@@ -315,13 +321,9 @@ void printIntBSTreeInfixComp(BSTreeComp*tree){
 	}
 	destroyDLStack(stck);
 
-}			destroyBSTNode(minNodeHere);
-			
-			}
-		tree->currSize--;
-		}
-	}
-}
+}	
+		
+	
 
 
 void printIntBSTreeDepthComp(BSTreeComp*tree){
@@ -396,28 +398,29 @@ void printIntBSTreeBreadthComp(BSTreeComp*tree){
 
 
 }
-static void destroyBSTreeAux(BSTNode* node){
+static void destroyBSTreeAux(BSTNode** node){
 
-	if(!node){
+	if(!(*node)){
 	return;
 	}
 	
-	if(node->left&&!node->right){
-	destroyBSTreeAux(node->left);
+	if((*node)->left&&!(*node)->right){
+	destroyBSTreeAux((*node)->left);
 	}
-	else if(node->right&&!node->left){
-	destroyBSTreeAux(node->right);
+	else if((*node)->right&&!(*node)->left){
+	destroyBSTreeAux((*node)->right);
 	}
-	else if(!isLeaf(node)){
-	destroyBSTreeAux(node->right);
-	destroyBSTreeAux(node->left);
+	else if((*node)->right&&!(*node)->left){
+	destroyBSTreeAux((*node)->right);
+	destroyBSTreeAux((*node)->left);
 	}
 
-	destroyBSTNode(&node);
+	destroyBSTNode(node);
+	*node=NULL;
 }
 void destroyBSTreeComp(BSTreeComp* tree){
 
-	destroyBSTreeAux(tree->root);
+	destroyBSTreeAux(&(tree->root));
 	free(tree->lastStep);
 	tree->lastStep=NULL;
 	free(tree);
