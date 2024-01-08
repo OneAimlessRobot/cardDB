@@ -425,19 +425,18 @@ void printIntBSTreeBreadthComp(BSTreeComp*tree){
 
 
 }
-static void destroyBSTreeAux(BSTNode** node,int counter){
+static void destroyBSTreeAux(BSTNode** node){
 	
-	printf("%d\n",counter);
 	if(*node){
 	if((*node)->left&&!(*node)->right){
-	destroyBSTreeAux(&((*node)->left),counter++);
+	destroyBSTreeAux(&((*node)->left));
 	}
 	else if((*node)->right&&!(*node)->left){
-	destroyBSTreeAux(&((*node)->right),counter++);
+	destroyBSTreeAux(&((*node)->right));
 	}
 	else if((*node)->right&&(*node)->left){
-	destroyBSTreeAux(&((*node)->right),counter++);
-	destroyBSTreeAux(&((*node)->left),counter++);
+	destroyBSTreeAux(&((*node)->right));
+	destroyBSTreeAux(&((*node)->left));
 	}
 	destroyBSTNode(node);
 	*node=NULL;
@@ -447,7 +446,7 @@ static void destroyBSTreeAux(BSTNode** node,int counter){
 }
 void destroyBSTreeComp(BSTreeComp* tree){
 
-	destroyBSTreeAux(&(tree->root),0);
+	destroyBSTreeAux(&(tree->root));
 	tree->root=NULL;
 	free(tree->lastStep->parent);
 	tree->lastStep->parent=NULL;

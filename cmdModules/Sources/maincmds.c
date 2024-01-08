@@ -22,6 +22,8 @@ int loaded=0;
 cmdstruct maincmds[] = {
 			{"load",load,"carrega cartas"},
                         {"addcard",addcard,"Adicionar carta"},
+                        {"addrand",addrand,"Adicionar carta com dados lixo"},
+                        {"addrandcards",addrands,"Adicionar cartas com dados lixo"},
                         {"remcard",remcard,"Remover carta"},
                         {"printcards",printcards,"Mostra cartas"},
                         {"printcard",printcard,"Mostra 1 carta"},
@@ -114,6 +116,32 @@ void addcard(int64_t argc,int* toExit, void** argv){
 
 		addCardToDataBase(cards,addedcard);
 		free(addedcard);
+	}
+	else{
+
+		fprintf(stderr,"Cartas nao carregadas!!!!\n");
+	}
+}
+void addrand(int64_t argc,int* toExit, void** argv){
+        if(loaded){
+		card* addedcard= initRandCard();
+		addCardToDataBase(cards,addedcard);
+		free(addedcard);
+	}
+	else{
+
+		fprintf(stderr,"Cartas nao carregadas!!!!\n");
+	}
+}
+void addrands(int64_t argc,int* toExit, void** argv){
+        if(loaded){
+		u_int64_t ammount=0;
+		fscanf(stdin,"%lu",&ammount);
+		for(;ammount;ammount--){
+		card* addedcard= initRandCard();
+		addCardToDataBase(cards,addedcard);
+		free(addedcard);
+		}
 	}
 	else{
 

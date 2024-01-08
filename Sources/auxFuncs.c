@@ -56,14 +56,15 @@ int genRandInt(int min, int max) {
 
 char* randStr(int size){
 
-        char* result= malloc(size+1);
-        memset(result,0,size+1);
+        char* result= malloc(size+2);
+        memset(result,0,size+2);
         for(int i=0;i<size;i++){
 
                 result[i]=(char)genRandInt((int)97,(int)112);
 
         }
-	result[size]=0;
+	result[size]=';';
+	result[size+1]=0;
         return result;
 
 

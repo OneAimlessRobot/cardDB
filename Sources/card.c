@@ -39,6 +39,28 @@ card* initCard(char name[CARDSMALLFIELDSIZE],char type[CARDSMALLFIELDSIZE], char
 
 
 }
+card* initRandCard(void){
+
+	card* result= malloc(sizeof(card));
+	char* randName= randStr(CARDSMALLFIELDSIZE);
+	memcpy(result->name,randName,CARDSMALLFIELDSIZE);
+	free(randName);
+	char* randType= randStr(CARDSMALLFIELDSIZE);
+	memcpy(result->type,randType,CARDSMALLFIELDSIZE);
+	free(randType);
+	char* randBuild= randStr(CARDLARGEFIELDSIZE);
+	memcpy(result->build,randBuild,CARDLARGEFIELDSIZE);
+	free(randBuild);
+	char* randDesc= randStr(CARDLARGEFIELDSIZE);
+	memcpy(result->desc,randDesc,CARDLARGEFIELDSIZE);
+	free(randDesc);
+	result->age=genRandInt(0,10000);
+	result->weight=genRandInt(0,10000);
+	result->height=genRandInt(0,10000);
+	return result;
+
+
+}
 
 static card* initEmptyCard(void){
 	card* result= malloc(sizeof(card));

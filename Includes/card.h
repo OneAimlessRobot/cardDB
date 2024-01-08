@@ -11,6 +11,7 @@ u_int64_t age,weight,height;
 
 int compareCards(void* arg1,void* arg2);
 card* initCard(char name[CARDSMALLFIELDSIZE],char type[CARDSMALLFIELDSIZE], char build[CARDLARGEFIELDSIZE], char desc[CARDLARGEFIELDSIZE],u_int64_t age, u_int64_t weight, u_int64_t height);
+card* initRandCard(void);
 char* printPrettyCard(card* collectible);
 card* fscanCard(FILE*fstream);
 void fprintCard(card* collectible,FILE* fstream);

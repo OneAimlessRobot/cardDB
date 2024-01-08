@@ -52,8 +52,8 @@ void runCmdLine(hashtablecomp* cmdLookupTable){
  	char* argv[ARGVMAX];
       memset(argv,0,ARGVMAX*sizeof(char*));
 
-		printf("HashShell (input goes here): ");
 		fflush(stdout);
+		printf("HashShell (input goes here): ");
 		if (fgets(line, LINESIZE, stdin) == NULL){ 
 
 			break;
