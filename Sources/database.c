@@ -101,8 +101,14 @@ carddatabase* initDataBase(char* filepath){
 void addCardToDataBase(carddatabase* db,card* collectible){
 
 	if(collectible){
+	card* found=(card*)findInBSTreeComp(db->storage, collectible);
+	if(!found){
 	addToBSTreeComp(db->storage,(void*)collectible);
 	db->numOfCards++;
+	}
+	else{
+		fprintf(stdout,"Carta ja existe!!!!\n");
+	}
 	}
 
 

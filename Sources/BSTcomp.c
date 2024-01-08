@@ -9,7 +9,8 @@
 static pathStep* initLastStep(BSTNode* node, int isLeft){
 
 pathStep* step= malloc(sizeof(pathStep));
-step->parent=node;
+step->parent=malloc(sizeof(BSTNode*));
+*(step->parent)=node;
 step->isLeft=isLeft;
 
 return step;
@@ -17,17 +18,10 @@ return step;
 }
 static pathStep* setLastStep(pathStep*step,BSTNode* node, int isLeft){
 
-step->parent=node;
+*(step->parent)=node;
 step->isLeft=isLeft;
 
 return step;
-
-}
-
-static void destroyPathStep(pathStep*step){
-
-free(step);
-step=NULL;
 
 }
 
@@ -60,12 +54,6 @@ static void destroyBSTNode(BSTNode** node){
 	free(*node);
 	(*node)=NULL;
 	
-}
-static void clearBSTNode(BSTNode* node){
-
-	free(node->mem);
-	node->mem=NULL;
-
 }
 
 
@@ -176,14 +164,14 @@ static void linkSubtree(BSTreeComp*tree,BSTNode* node){
 
 	}
 	
-	if(tree->lastStep->parent){
+	if(*(tree->lastStep->parent)){
 		
 		if(tree->lastStep->isLeft){
-			tree->lastStep->parent->left=node;
+			(*(tree->lastStep->parent))->left=node;
 			return;
 		}
 		else{
-			tree->lastStep->parent->right=node;
+			(*(tree->lastStep->parent))->right=node;
 			return;
 		}
 		
@@ -209,7 +197,7 @@ BSTNode* node= initNakedBSTNode(tree,elem);
 		tree->currSize++;
 		}
 		else{
-		destroyBSTNode(node);
+		destroyBSTNode(&node);
 		}
 
 	}
@@ -230,53 +218,92 @@ static BSTNode* minNode(BSTreeComp* tree,BSTNode* node){
 
 
 }
+static void removeBSTRootComp(BSTreeComp*tree){
+
+	if(isLeaf(tree->root)){
+			
+			destroyBSTNode(&(tree->root));
+			
+		}
+		else{
+			BSTNode** minNodeHere=malloc(sizeof(BSTNode*));
+			*minNodeHere=tree->root;
+			if((*minNodeHere)->right){
+			(*minNodeHere)=(*minNodeHere)->right;
+			}
+			else if((*minNodeHere)->left){
+			(*minNodeHere)=(*minNodeHere)->left;
+			}
+			destroyBSTNode(&(tree->root));
+			
+			tree->root=*minNodeHere;
+			free(minNodeHere);
+			
+			
+			
+			}
+		
+
+
+}
 void removeFromBSTreeComp(BSTreeComp* tree,void* elem){
 
 	if(tree->root){
-		BSTNode* node=NULL;
-		if((node=findNodeInBSTree(tree,elem))){
-			
-			printf("%d\n",*(int*)(node->mem));
-		if(isLeaf(node)){
+		BSTNode** node=malloc(sizeof(BSTNode*));
+		if(((*node)=findNodeInBSTree(tree,elem))){
+		if((*node)==tree->root){
+
+			removeBSTRootComp(tree);
+
+		}
+		else {
+		if(isLeaf(*node)){
 			
 			if(tree->lastStep->isLeft){
-			tree->lastStep->parent->left=NULL;
-			destroyBSTNode(&node);
+			(*(tree->lastStep->parent))->left=NULL;
+			destroyBSTNode(node);
 			
 			}
 			else{
-			tree->lastStep->parent->right=NULL;
-			destroyBSTNode(&node);
+			(*(tree->lastStep->parent))->right=NULL;
+			destroyBSTNode(node);
 			
 			}
 
 		}
-		else if(!node->left&&node->right){
+		else if(!(*node)->left&&(*node)->right){
 
-			linkSubtree(tree,node->right);
-			destroyBSTNode(&node);
+			linkSubtree(tree,(*node)->right);
+			destroyBSTNode(node);
 
 
 		}
-		else if(!node->right&&node->left){
+		else if(!(*node)->right&&(*node)->left){
 
-			linkSubtree(tree,node->left);
-			destroyBSTNode(&node);
+			linkSubtree(tree,(*node)->left);
+			destroyBSTNode(node);
 		}
 		else{
-			BSTNode* minNodeHere=node;
-			if(node->right){
-			minNodeHere=node->right;
+			BSTNode** minNodeHere=malloc(sizeof(BSTNode*));
+			*minNodeHere=*node;
+			if((*node)->right){
+			(*minNodeHere)=(*node)->right;
 			}
 
-			setLastStep(tree->lastStep,node,0);
-			minNodeHere=minNode(tree,minNodeHere);
-			memset(node->mem,0,tree->elemSize);
-			memcpy(node->mem,minNodeHere->mem,tree->elemSize);
-			linkSubtree(tree,minNodeHere->right);
-			destroyBSTNode(&minNodeHere);
+			setLastStep(tree->lastStep,*node,0);
+			(*minNodeHere)=minNode(tree,*minNodeHere);
+			memset((*node)->mem,0,tree->elemSize);
+			memcpy((*node)->mem,(*minNodeHere)->mem,tree->elemSize);
+			linkSubtree(tree,(*minNodeHere)->right);
+			destroyBSTNode(minNodeHere);
+			*minNodeHere=NULL;
+			free(minNodeHere);
+			
+			
 			
 			}
+		}
+		free(node);
 		tree->currSize--;
 		}
 	}
@@ -398,29 +425,32 @@ void printIntBSTreeBreadthComp(BSTreeComp*tree){
 
 
 }
-static void destroyBSTreeAux(BSTNode** node){
-
-	if(!(*node)){
-	return;
-	}
+static void destroyBSTreeAux(BSTNode** node,int counter){
 	
+	printf("%d\n",counter);
+	if(*node){
 	if((*node)->left&&!(*node)->right){
-	destroyBSTreeAux((*node)->left);
+	destroyBSTreeAux(&((*node)->left),counter++);
 	}
 	else if((*node)->right&&!(*node)->left){
-	destroyBSTreeAux((*node)->right);
+	destroyBSTreeAux(&((*node)->right),counter++);
 	}
-	else if((*node)->right&&!(*node)->left){
-	destroyBSTreeAux((*node)->right);
-	destroyBSTreeAux((*node)->left);
+	else if((*node)->right&&(*node)->left){
+	destroyBSTreeAux(&((*node)->right),counter++);
+	destroyBSTreeAux(&((*node)->left),counter++);
 	}
-
 	destroyBSTNode(node);
 	*node=NULL;
+
+	}
+	
 }
 void destroyBSTreeComp(BSTreeComp* tree){
 
-	destroyBSTreeAux(&(tree->root));
+	destroyBSTreeAux(&(tree->root),0);
+	tree->root=NULL;
+	free(tree->lastStep->parent);
+	tree->lastStep->parent=NULL;
 	free(tree->lastStep);
 	tree->lastStep=NULL;
 	free(tree);
@@ -438,12 +468,6 @@ void* findInBSTreeComp(BSTreeComp* tree, void* data){
 
 	}
 	return NULL;
-}
-
-
-static int compareInts(int* a, int* b){
-	
-	return (*a)-(*b);
 }
 
 BSTreeComp* makeIntTreeComp(int arr[],int arrSize,comparator*comp){

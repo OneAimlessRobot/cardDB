@@ -18,7 +18,7 @@ struct BSTNode* left,*right;
 
 typedef struct pathStep{
 
-BSTNode* parent;
+BSTNode** parent;
 int isLeft;
 
 
