@@ -1,11 +1,15 @@
 #ifndef CARD_H
 #define CARD_H
 #define CARDSMALLFIELDSIZE 128
+#define CARDMIDFIELDSIZE 128
 #define CARDLARGEFIELDSIZE 5000
 typedef struct card{
 
 char name[CARDSMALLFIELDSIZE+1],type[CARDSMALLFIELDSIZE+1],build[CARDLARGEFIELDSIZE+1],desc[CARDLARGEFIELDSIZE+1];
 u_int64_t age,weight,height;
+u_int64_t numOfArts;
+char  artfilepath[CARDMIDFIELDSIZE+1]; //NULL terminated
+BSTreeComp* actualArts;
 
 }card;
 
