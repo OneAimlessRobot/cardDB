@@ -252,6 +252,10 @@ static musictrack* parseTrack(FILE* stream){
 }
 
 /*Falta:
+	(FAZER ISTO TUDO NO HEADER PRIMEIRO PARA SER MAIS FACIL. DEPOIS DEIXAR CABEÇALHOS PARA TRAS
+	ASSIM COMO DECLARACOES. METER FUNCOES ESTATICAS NO FICHEIRO '.c'. Ai de mim daqui a uns
+	tempos...)
+	
 	funcao para triar entre o tipo de artefacto (objeto artistico vs journal).
 	vai ter um switch que vai receber o inteiro vindo deste funcao assim como a stream.
 	la, se for journal, vai direto para a funcao parseJournal.
