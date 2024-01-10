@@ -259,15 +259,53 @@ static musictrack* parseTrack(FILE* stream){
 	funcao para triar entre o tipo de artefacto (objeto artistico vs journal).
 	vai ter um switch que vai receber o inteiro vindo deste funcao assim como a stream.
 	la, se for journal, vai direto para a funcao parseJournal.
-	Se for objeto artistico, vai para uma funcao de parsing de objetos artisticos
+	Se for objeto artistico, vai para uma...
+
+	funcao de parsing de objetos artisticos
 	em que lhe e passado o tipo de objeto artistico com scanf na stream
-	que tem um switch que seleciona o parsing efetuado com base no 
-	tipo de objeto artistico. Isso e enfiado num buffer criado com malloc, escrito na arvore
+	que tem um switch que seleciona o parsing efetuado com base no
+	tipo de objeto artistico.
+
+	Isso e enfiado num buffer criado com malloc, escrito na arvore
 	depois siga proximo.
 
 
 */
 BSTreeComp* genArtifactTreeFromStream(FILE* stream){
+
+	BSTreeComp* tree= initBSTreeComp(sizeof(artifact),artCompare);
+	u_int64_t numOfArtifacts=0;
+	fscanf(stream,"%lu",&numOfArtifacts);
+	for(;numOfArtifacts;numOfArtifacts--){
+		artifact* obj= malloc(sizeof(artifact));
+		scanf(stream,"%d",&obj->type);
+		
+
+
+	}
+
+
+}
+artifact* genArtifactFromStream(FILE* stream){
+	
+	artifactindex i;
+	fscanf(stream,"%d",&i);
+	switch(i){
+		
+		case JOURNAL:
+		return parseJournal(stream);
+		case ARTPIECE:
+		return parseArtpiece(stream);
+		default:
+		break;
+		
+
+
+	}
+
+
+}
+arifact* genArtifactTreeFromStream(FILE* stream){
 
 	BSTreeComp* tree= initBSTreeComp(sizeof(artifact),artCompare);
 	u_int64_t numOfArtifacts=0;
