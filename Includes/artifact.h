@@ -286,16 +286,48 @@ BSTreeComp* genArtifactTreeFromStream(FILE* stream){
 
 
 }
-artifact* genArtifactFromStream(FILE* stream){
+artifact* genArtifactFromStream(FILE* stream,artifactindex i){
 	
-	artifactindex i;
-	fscanf(stream,"%d",&i);
 	switch(i){
 		
 		case JOURNAL:
 		return parseJournal(stream);
 		case ARTPIECE:
 		return parseArtpiece(stream);
+		default:
+		break;
+		
+
+
+	}
+
+
+}
+artifact* parseArtpiece(FILE* stream){
+	/*
+		
+	
+	PHRASE=1;
+	TEXT=2;
+	MUSICTRACK=3;
+	MUSICALBUM=4;
+	
+	
+	
+	
+	*/
+	artpieceindex i;
+	fscanf(stream,"%d",&i);
+	switch(i){
+		
+		case PHRASE:
+		return parsePhrase(stream);
+		case TEXT:
+		return parseText(stream);
+		case MUSICTRACK:
+		return parseTrack(stream);
+		case MUSICALBUM:
+		return parseAlbum(stream);
 		default:
 		break;
 		
@@ -313,7 +345,7 @@ arifact* genArtifactTreeFromStream(FILE* stream){
 	for(;numOfArtifacts;numOfArtifacts--){
 		artifact* obj= malloc(sizeof(artifact));
 		scanf(stream,"%d",&obj->type);
-		
+		obj->untypedartifact=genArtifactFromStream(stream,obj->type);
 
 
 	}
