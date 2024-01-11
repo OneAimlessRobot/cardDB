@@ -116,7 +116,7 @@ void addCardToDataBase(carddatabase* db,card* collectible){
 
 void remCardFromDataBase(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 	
-	card tmp= {{0},{0},{0},{0},0,0,0};
+	card tmp= {{0},{0},{0},{0},0,0,0,0,{0},NULL};
 	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
 	u_int64_t size=db->storage->currSize;
 	removeFromBSTreeComp(db->storage,(void*)&tmp);
@@ -146,7 +146,7 @@ void printDataBase(carddatabase* db){
 
 void printDataBaseCard(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 
-	card tmp= {{0},{0},{0},{0},0,0,0};
+	card tmp= {{0},{0},{0},{0},0,0,0,0,{0},NULL};
 	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
 	card* found=(card*)findInBSTreeComp(db->storage, &tmp);
 	if(!found){

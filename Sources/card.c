@@ -68,6 +68,7 @@ static card* initEmptyCard(void){
 	memset(result->type,0,CARDSMALLFIELDSIZE+1);
 	memset(result->build,0,CARDLARGEFIELDSIZE+1);
 	memset(result->desc,0,CARDLARGEFIELDSIZE+1);
+	memset(result->artfilepath,0,CARDMIDFIELDSIZE+1);
 	return result;
 
 
@@ -98,7 +99,9 @@ card* fscanCard(FILE* fstream){
 	removeUnderscoreChars(result->build,CARDLARGEFIELDSIZE);
 	removeUnderscoreChars(result->desc,CARDLARGEFIELDSIZE);
 	*/
-	fscanf(fstream,"%lu%lu%lu\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n",&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc);
+	fscanf(fstream,"%lu%lu%lu%lu\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n",&result->numOfArts,&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc,result->artfilepath);
+	
+	result->actualArts=genArtifactTreeFromStream(
 	return result;
 	
 
@@ -114,7 +117,7 @@ void fprintCard(card* collectible,FILE* fstream){
 	removeSpaceChars(collectible->desc,CARDLARGEFIELDSIZE);
 	fprintf(fstream,"%lu\n%lu\n%lu\n%s\n%s\n%s\n%s\n",collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc);
 	*/
-	fprintf(fstream,"%lu\n%lu\n%lu\n%s;\n%s;\n%s;\n%s;\n\n",collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc);
+	fprintf(fstream,"%lu\n%lu\n%lu\n%lu\n%s;\n%s;\n%s;\n%s;\n%s;\n",collectible->numOfArts,collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc,collectible->artfilepath);
 	
 }
 void destroyCard(card** collectible){

@@ -12,7 +12,7 @@ DList nextNode;
 
 void* nextIt(dliterator* it);
 dliterator* initIt(DListW* list);
-void* hasNextIt(dliterator*it);
+u_int64_t hasNextIt(dliterator*it);
 void rewindIt(dliterator*it);
 
 
@@ -26,7 +26,7 @@ DList nextNode;
 
 void* nextItComp(dliteratorcomp* it);
 dliteratorcomp* initItComp(DListWComp* list);
-void* hasNextItComp(dliteratorcomp*it);
+u_int64_t hasNextItComp(dliteratorcomp*it);
 void rewindItComp(dliteratorcomp*it);
 
 #endif

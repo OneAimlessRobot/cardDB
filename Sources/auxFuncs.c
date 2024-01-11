@@ -21,7 +21,7 @@ double genRanddouble(double min, double max){
 
 void removeSpaceChars(char* buff, u_int64_t length){
 
-	for(int i=0;i<length&&length>0;i++){
+	for(u_int64_t i=0;i<length&&length>0;i++){
 
 		if(buff[i]==' '){
 
@@ -33,7 +33,7 @@ void removeSpaceChars(char* buff, u_int64_t length){
 }
 void removeUnderscoreChars(char* buff, u_int64_t length){
 
-	for(int i=0;i<length&&length>0;i++){
+	for(u_int64_t i=0;i<length&&length>0;i++){
 
 		if(buff[i]=='_'){
 

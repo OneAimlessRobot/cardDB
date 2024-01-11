@@ -25,10 +25,10 @@ dliterator* initIt(DListW* list){
 
 
 }
-void* hasNextIt(dliterator*it){
+u_int64_t hasNextIt(dliterator*it){
 
 	//printf("No: %p\n",it->nextNode);
-	return it->nextNode;
+	return(u_int64_t)it->nextNode;
 
 }
 void rewindIt(dliterator*it){
@@ -56,10 +56,10 @@ dliteratorcomp* initItComp(DListWComp* list){
 
 
 }
-void* hasNextItComp(dliteratorcomp*it){
+u_int64_t hasNextItComp(dliteratorcomp*it){
 
 
-	return it->nextNode;
+	return (u_int64_t)it->nextNode;
 
 }
 void rewindItComp(dliteratorcomp*it){

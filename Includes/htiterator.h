@@ -12,7 +12,7 @@ hashtablecomp* table;
 
 void* nextItHT(htiterator* it);
 htiterator* initItHT(hashtablecomp* table);
-void* hasNextItHT(htiterator*it);
+u_int64_t hasNextItHT(htiterator*it);
 int rewindItHT(htiterator*it);
 
 #endif

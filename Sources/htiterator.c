@@ -52,9 +52,9 @@ htiterator* initItHT(hashtablecomp* table){
 
 
 }
-void* hasNextItHT(htiterator*it){
+u_int64_t hasNextItHT(htiterator*it){
 
-	return(void*)( it->currpos<=it->lastpos &&(int) hasNextItComp(it->currIt));
+	return(u_int64_t)( it->currpos<=it->lastpos &&(u_int64_t) hasNextItComp(it->currIt));
 
 }
 int rewindItHT(htiterator*it){
