@@ -119,6 +119,8 @@ void remCardFromDataBase(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 	card tmp= {{0},{0},{0},{0},0,0,0,{0},NULL};
 	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
 	u_int64_t size=db->storage->currSize;
+	card* found=(card*)findInBSTreeComp(db->storage,&tmp);
+	destroyArtifactTree(found->actualArts);
 	removeFromBSTreeComp(db->storage,(void*)&tmp);
 	if(db->storage->currSize!=size){
 	db->numOfCards--;
@@ -142,8 +144,34 @@ void printDataBase(carddatabase* db){
 	
 
 }
+void printDataBaseLess(carddatabase* db){
 
 
+	treeIt* it= initTreeItComp(db->storage);
+	while(hasNextTreeItComp(it)){
+		
+		card* nextElem=(card*) nextTreeItComp(it);
+		printf("%s\n",(card*)nextElem->name);
+	}
+	destroyTreeIt(it);
+	
+
+}
+
+
+void printCardArt(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
+
+	card tmp= {{0},{0},{0},{0},0,0,0,{0},NULL};
+	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
+	card* found=(card*)findInBSTreeComp(db->storage, &tmp);
+	if(!found){
+		printf("No such card!!! %s N existe\n",tmp.name);
+		return;
+	}
+	printArtifactTree(stdout,found->actualArts);
+
+
+}
 void printDataBaseCard(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 
 	card tmp= {{0},{0},{0},{0},0,0,0,{0},NULL};

@@ -27,4 +27,8 @@ void saveDataBase(carddatabase* db);
 
 void destroyDataBase(carddatabase* db);
 
+void printDataBaseLess(carddatabase* db);
+
+void printCardArt(carddatabase* db,char name[CARDSMALLFIELDSIZE]);
+
 #endif

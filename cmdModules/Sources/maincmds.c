@@ -196,6 +196,24 @@ void addrands(int64_t argc,int* toExit, void** argv){
 
 void printcardart(int64_t argc,int* toExit, void** argv){
 
+	if(loaded&&cards->storage->currSize){
+		fflush(stdin);
+		char name[CARDSMALLFIELDSIZE]={0};
+		printf("Insere nome de carta:\n");
+		fscanf(stdin,"%[^;];",name);
+		printCardArt(cards,name);
+	}
+	else{
+		
+		if(!loaded){
+		fprintf(stderr,"Cartas nao carregadas!!!!\n");
+		}
+		else if(!cards->storage->currSize){
+
+		fprintf(stderr,"Não existem cartas!!!!\n");
+		
+		}
+	}
 
 }
 void remcard(int64_t argc,int* toExit, void** argv){
@@ -222,9 +240,23 @@ void remcard(int64_t argc,int* toExit, void** argv){
 }
 
 void printcards(int64_t argc,int* toExit, void** argv){
-       	if(loaded&&cards->storage->currSize){
-
-		printDataBase(cards);
+       	if(argc!=2){
+		fprintf(stderr,"precisas de um modo de imprimir!!!!\n 'v' para verbose. 'l' para so nomes\n");
+		return;
+	}
+	
+	if(loaded&&cards->storage->currSize){
+		switch((int)((char*)((char**)argv)[1])[0]){
+		
+			case 'l':
+			printDataBaseLess(cards);
+			break;
+			case 'v':
+			printDataBase(cards);
+			break;
+			default:
+			break;
+		}
 	}
 	else{
 		if(!loaded){
