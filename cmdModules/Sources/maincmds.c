@@ -13,20 +13,26 @@
 #include "../../Includes/htiterator.h"
 #include "../../Includes/hashtablecmd.h"
 #include "../../Includes/cmdstruct.h"
+#include "../../Includes/artifact.h"
 #include "../../Includes/card.h"
 #include "../../Includes/database.h"
 #include "../Includes/maincmds.h"
 
 carddatabase* cards=NULL;
+BSTreeComp* testarttree=NULL;
 int loaded=0;
+int artloaded=0;
 cmdstruct maincmds[] = {
 			{"load",load,"carrega cartas"},
+                        {"loadart",loadart,"(TEST) carrega arte"},
                         {"addcard",addcard,"Adicionar carta"},
                         {"addrand",addrand,"Adicionar carta com dados lixo"},
                         {"addrandcards",addrands,"Adicionar cartas com dados lixo"},
                         {"remcard",remcard,"Remover carta"},
                         {"printcards",printcards,"Mostra cartas"},
+                        {"printart",printart,"(TEST) Mostra arte"},
                         {"printcard",printcard,"Mostra 1 carta"},
+                        {"printcardart",printcardart,"Mostra arte de 1 carta"},
                         {"printsize",printsize,"Mostra numero de cartas carregadas"},
                         {"sair",sair,"sair"},
                         {"showallcmds",showallcmds,"mostrar comandos disponiveis"},
@@ -37,7 +43,26 @@ cmdstruct maincmds[] = {
 
 void sair(int64_t argc,int* toExit, void** argv){
         *toExit=1;
+	if(loaded){
 	destroyDataBase(cards);
+	fprintf(stdout,"Cartas destruidas!!!!\n");
+	}
+	if(artloaded){
+	destroyArtifactTree(testarttree);
+	fprintf(stdout,"Arte destruida!!!!\n");
+	}
+}
+
+void loadart(int64_t argc,int* toExit, void** argv){
+	char path[ARTMIDFIELDSIZE+1]={0};
+	fprintf(stdout,"\ninsere aqui a path para a arte:\n");
+	fscanf(stdin,"%[^;];",path);
+	FILE* stream= fopen(path,"r");
+	testarttree= genArtifactTreeFromStream(stream);
+	artloaded=1;
+	fclose(stream);
+	fprintf(stdout,"Carregaste %lu artes!!!\n",testarttree->currSize);
+	
 }
 
 void load(int64_t argc,int* toExit, void** argv){
@@ -62,6 +87,22 @@ void save(int64_t argc,int* toExit, void** argv){
 	}
 }
 
+void printart(int64_t argc,int* toExit, void** argv){
+       	
+		if(!artloaded){
+		fprintf(stderr,"Arte nao inicializada!!!!\n");
+		}
+		else if(!testarttree->currSize){
+
+		fprintf(stderr,"Não existe arte!!!!\n");
+		
+		}
+		else{
+
+		printArtifactTree(stdout,testarttree);
+	
+		}
+}
 void printcard(int64_t argc,int* toExit, void** argv){
        	
 	if(loaded&&cards->storage->currSize){
@@ -91,6 +132,7 @@ void addcard(int64_t argc,int* toExit, void** argv){
 		memset(addedcard->type,0,CARDSMALLFIELDSIZE+1);
 		memset(addedcard->build,0,CARDLARGEFIELDSIZE+1);
 		memset(addedcard->desc,0,CARDLARGEFIELDSIZE+1);
+		memset(addedcard->artfilepath,0,CARDMIDFIELDSIZE+1);
 		fprintf(stdout,"(Para os primeiros 4 campos, tudo e lido ate se encontrar um ';')\n");
 
 		fprintf(stdout,"insere aqui o nome (termina em ';') (max 127):\n");
@@ -113,6 +155,9 @@ void addcard(int64_t argc,int* toExit, void** argv){
 
 		fprintf(stdout,"insere aqui a massa (kg):");
 		fscanf(stdin,"%lu",&addedcard->weight);
+
+		fprintf(stdout,"insere aqui a path para a arte:");
+		fscanf(stdin,"%[^;];",addedcard->artfilepath);
 
 		addCardToDataBase(cards,addedcard);
 		free(addedcard);
@@ -149,6 +194,10 @@ void addrands(int64_t argc,int* toExit, void** argv){
 	}
 }
 
+void printcardart(int64_t argc,int* toExit, void** argv){
+
+
+}
 void remcard(int64_t argc,int* toExit, void** argv){
         if(loaded&&cards->storage->currSize){
 		

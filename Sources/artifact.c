@@ -123,6 +123,7 @@ comparator artCompare={compareArtifacts};
 static phrase parsePhrase(FILE* stream){
 
 		phrase newPhrase;
+		memset(&newPhrase,0,sizeof(phrase));
 		char *desc;
 		memset(desc=newPhrase.desc,0,ARTMIDFIELDSIZE+1);
 		fscanf(stream,"%[^;];",desc);
@@ -133,7 +134,8 @@ static phrase parsePhrase(FILE* stream){
 static text parseText(FILE* stream){
 
 		text newText;
-		memset(newText.title,0,ARTSMALLFIELDSIZE+1);
+		memset(&newText,0,sizeof(text));
+		memset(newText.title,0,ARTMIDFIELDSIZE+1);
 		memset(newText.desc,0,ARTLARGEFIELDSIZE+1);
 		fscanf(stream,"%[^;];%[^;];",newText.title,newText.desc);
 		return newText;
@@ -143,9 +145,12 @@ static text parseText(FILE* stream){
 static journal parseJournal(FILE* stream){
 
 	journal result;
+	memset(&result,0,sizeof(journal));
 	u_int64_t numOfTexts=0;
 	result.textList=initDListComp(sizeof(artifact),&artCompare);
 	fscanf(stream, "%lu",&numOfTexts);
+	memset(result.intro,0,ARTLARGEFIELDSIZE+1);
+	fscanf(stream, "%[^;];",result.intro);
 	result.numOfTexts=numOfTexts;
 	for(;numOfTexts;numOfTexts--){
 		text newText=parseText(stream);
@@ -161,8 +166,8 @@ static musictrack parseTrack(FILE* stream){
 		musictrack newTrack;
 		memset(&newTrack,0,sizeof(musictrack));
 		char* title,*genre,*desc;
-		memset(title=newTrack.title,0,ARTSMALLFIELDSIZE+1);
-		memset(genre=newTrack.genre,0,ARTSMALLFIELDSIZE+1);
+		memset(title=newTrack.title,0,ARTMIDFIELDSIZE+1);
+		memset(genre=newTrack.genre,0,ARTMIDFIELDSIZE+1);
 		memset(desc=newTrack.desc,0,ARTLARGEFIELDSIZE+1);
 		fscanf(stream,"%[^;];%[^;];%[^;];",title,genre,desc);
 		return newTrack;
@@ -171,9 +176,12 @@ static musictrack parseTrack(FILE* stream){
 static musicalbum parseAlbum(FILE* stream){
 
 	musicalbum result;
+	memset(&result,0,sizeof(musicalbum));
 	u_int64_t numOfArtifacts=0;
 	result.trackList=initDListComp(sizeof(artifact),&artCompare);
 	fscanf(stream, "%lu",&numOfArtifacts);
+	memset(result.title,0,ARTMIDFIELDSIZE+1);
+	fscanf(stream, "%[^;];",result.title);
 	result.numOfTracks=numOfArtifacts;
 	for(;numOfArtifacts;numOfArtifacts--){
 		musictrack newTrack=parseTrack(stream);
@@ -192,6 +200,7 @@ static void printTrack(FILE* stream,musictrack* track){
 static void printAlbum(FILE* stream,musicalbum* album){
 
 	fprintf(stream, "%lu\n",album->trackList->currSize);
+	fprintf(stream, "%s;\n",album->title);
 	dliteratorcomp* it= initItComp(album->trackList);
 	while(hasNextItComp(it)){
 		musictrack* track=nextItComp(it);
@@ -209,6 +218,7 @@ static void printText(FILE* stream,text* comp){
 static void printJournal(FILE* stream,journal* diary){
 
 	fprintf(stream, "%lu\n",diary->textList->currSize);
+	fprintf(stream, "%s;\n",diary->intro);
 	dliteratorcomp* it= initItComp(diary->textList);
 	while(hasNextItComp(it)){
 		text* txt=nextItComp(it);
@@ -305,7 +315,6 @@ static artpiece parseArtpiece(FILE* stream){
 	*/
 	artpiece artobj;
 	memset(&artobj,0,sizeof(artpiece));
-	
 	fscanf(stream,"%d",&artobj.type);
 	switch(artobj.type){
 		
@@ -331,10 +340,12 @@ static artpiece parseArtpiece(FILE* stream){
 
 }
 
-artifact genArtifactFromStream(FILE* stream,artifactindex i){
+static artifact genArtifactFromStream(FILE* stream){
 		
 	artifact obj;
-	obj.type= i;
+	memset(&obj,0,sizeof(artifact));
+	fscanf(stream,"%d",&obj.type);
+	int i=obj.type;
 	switch(i){
 		case JOURNAL:
 		obj.object.diary=parseJournal(stream);
@@ -357,17 +368,30 @@ BSTreeComp* genArtifactTreeFromStream(FILE* stream){
 	u_int64_t numOfArtifacts=0;
 	fscanf(stream,"%lu",&numOfArtifacts);
 	for(;numOfArtifacts;numOfArtifacts--){
-		artifact obj=genArtifactFromStream(stream,obj.type);
+		artifact obj=genArtifactFromStream(stream);
 		addToBSTreeComp(tree,(void*)&obj);
 
 	}
 
 	return tree;
 }
+void printArtifactTree(FILE*stream,BSTreeComp* tree){
+
+	fprintf(stream,"%lu\n",tree->currSize);
+	treeIt* it= initTreeItComp(tree);
+	while(hasNextTreeItComp(it)){
+		
+		artifact* nextElem= (artifact*)nextTreeItComp(it);
+		printArtifact(stream,nextElem);
+	}
+	destroyTreeIt(it);
+}
+
 void destroyArtifactTree(BSTreeComp* tree){
 
-	
+	if(tree->currSize){
 	treeIt* it= initTreeItComp(tree);
+	
 	while(hasNextTreeItComp(it)){
 		
 		artifact* nextElem= (artifact*)nextTreeItComp(it);
@@ -390,5 +414,8 @@ void destroyArtifactTree(BSTreeComp* tree){
 		}
 	}
 	destroyTreeIt(it);
+	}
 	destroyBSTreeComp(tree);
 }
+
+

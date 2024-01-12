@@ -4,11 +4,17 @@ void sair(int64_t argc,int* toExit, void** argv);
 
 void load(int64_t argc,int* toExit, void** argv);
 
+void loadart(int64_t argc,int* toExit, void** argv);
+
 void showallcmds(int64_t argc,int* toExit, void** argv);
 
 void save(int64_t argc,int* toExit, void** argv);
 
 void printcard(int64_t argc,int* toExit, void** argv);
+
+void printart(int64_t argc,int* toExit, void** argv);
+
+void printcardart(int64_t argc,int* toExit, void** argv);
 
 void addcard(int64_t argc,int* toExit, void** argv);
 

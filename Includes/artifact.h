@@ -2,7 +2,7 @@
 #define ARTIFACT_H
 #define ARTSMALLFIELDSIZE 128
 #define ARTMIDFIELDSIZE  750
-#define ARTLARGEFIELDSIZE 2000
+#define ARTLARGEFIELDSIZE 5000
 typedef enum artifactindex {
 	
 	ARTPIECE=1,
@@ -22,14 +22,14 @@ typedef enum artpieceindex {
 
 typedef struct musictrack{
 
-	char title[ARTSMALLFIELDSIZE+1],genre[ARTSMALLFIELDSIZE+1],desc[ARTLARGEFIELDSIZE+1];
+	char title[ARTMIDFIELDSIZE+1],genre[ARTSMALLFIELDSIZE+1],desc[ARTLARGEFIELDSIZE+1];
 
 
 }musictrack;
 typedef struct text{
 
 	
-	char title[ARTSMALLFIELDSIZE+1],desc[ARTLARGEFIELDSIZE+1];
+	char title[ARTMIDFIELDSIZE+1],desc[ARTLARGEFIELDSIZE+1];
 
 
 }text;
@@ -43,12 +43,14 @@ typedef struct phrase{
 typedef struct musicalbum{
 	
 	u_int64_t numOfTracks;
+	char title[ARTMIDFIELDSIZE+1];
 	DListWComp* trackList;
 
 }musicalbum;
 
 typedef struct journal{
 	u_int64_t numOfTexts;
+	char intro[ARTLARGEFIELDSIZE+1];
 	DListWComp* textList;
 	
 }journal;
@@ -139,9 +141,11 @@ extern comparator artCompare;
 */
 BSTreeComp* genArtifactTreeFromStream(FILE* stream);
 
-artifact genArtifactFromStream(FILE* stream,artifactindex i);
 
 void printArtifact(FILE* stream,artifact* obj);
 
 void destroyArtifactTree(BSTreeComp* tree);
+
+void printArtifactTree(FILE*stream,BSTreeComp* tree);
+
 #endif

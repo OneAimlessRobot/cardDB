@@ -99,7 +99,8 @@ card* fscanCard(FILE* fstream){
 	removeUnderscoreChars(result->build,CARDLARGEFIELDSIZE);
 	removeUnderscoreChars(result->desc,CARDLARGEFIELDSIZE);
 	*/
-	fscanf(fstream,"%lu%lu%lu%lu\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n",&result->numOfArts,&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc,result->artfilepath);
+	fscanf(fstream,"%lu%lu%lu\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n",&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc,result->artfilepath);
+	fprintf(stdout,"%s\n",result->artfilepath);
 	FILE* tstream= fopen(result->artfilepath,"r");
 	result->actualArts=genArtifactTreeFromStream(tstream);
 	fclose(tstream);
@@ -118,7 +119,7 @@ void fprintCard(card* collectible,FILE* fstream){
 	removeSpaceChars(collectible->desc,CARDLARGEFIELDSIZE);
 	fprintf(fstream,"%lu\n%lu\n%lu\n%s\n%s\n%s\n%s\n",collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc);
 	*/
-	fprintf(fstream,"%lu\n%lu\n%lu\n%lu\n%s;\n%s;\n%s;\n%s;\n%s;\n",collectible->numOfArts,collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc,collectible->artfilepath);
+	fprintf(fstream,"%lu\n%lu\n%lu\n%s;\n%s;\n%s;\n%s;\n%s;\n",collectible->age,collectible->weight,collectible->height,collectible->name,collectible->type,collectible->build,collectible->desc,collectible->artfilepath);
 	
 }
 void destroyCard(card** collectible){
