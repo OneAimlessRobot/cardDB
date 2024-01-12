@@ -7,6 +7,7 @@
 #include "../Includes/queueList.h"
 #include "../Includes/dliterator.h"
 #include "../Includes/BSTcomp.h"
+#include "../Includes/treeIt.h"
 #include "../Includes/card.h"
 #include "../Includes/artifact.h"
 /*
@@ -362,4 +363,32 @@ BSTreeComp* genArtifactTreeFromStream(FILE* stream){
 	}
 
 	return tree;
+}
+void destroyArtifactTree(BSTreeComp* tree){
+
+	
+	treeIt* it= initTreeItComp(tree);
+	while(hasNextTreeItComp(it)){
+		
+		artifact* nextElem= (artifact*)nextTreeItComp(it);
+		switch(nextElem->type){
+			case JOURNAL:
+				destroyDListComp(nextElem->object.diary.textList);
+			break;
+			case ARTPIECE:
+				switch(nextElem->object.artobject.type){
+					case MUSICALBUM:
+				destroyDListComp(nextElem->object.artobject.contents.album.trackList);
+					break;
+					default:
+					break;
+				}
+			break;
+			default:
+			break;
+		
+		}
+	}
+	destroyTreeIt(it);
+	destroyBSTreeComp(tree);
 }

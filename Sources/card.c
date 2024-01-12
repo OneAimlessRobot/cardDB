@@ -100,8 +100,9 @@ card* fscanCard(FILE* fstream){
 	removeUnderscoreChars(result->desc,CARDLARGEFIELDSIZE);
 	*/
 	fscanf(fstream,"%lu%lu%lu%lu\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n%[^;];\n",&result->numOfArts,&result->age,&result->weight,&result->height,result->name,result->type,result->build,result->desc,result->artfilepath);
-	
-	result->actualArts=genArtifactTreeFromStream(
+	FILE* tstream= fopen(result->artfilepath,"r");
+	result->actualArts=genArtifactTreeFromStream(tstream);
+	fclose(tstream);
 	return result;
 	
 

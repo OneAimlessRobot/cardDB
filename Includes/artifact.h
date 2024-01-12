@@ -143,4 +143,5 @@ artifact genArtifactFromStream(FILE* stream,artifactindex i);
 
 void printArtifact(FILE* stream,artifact* obj);
 
+void destroyArtifactTree(BSTreeComp* tree);
 #endif

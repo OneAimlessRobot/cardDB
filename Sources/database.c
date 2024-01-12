@@ -194,6 +194,16 @@ void saveDataBase(carddatabase* db){
 void destroyDataBase(carddatabase* db){
 
 	if(db){
+	if(db->storage->currSize){
+	treeIt* it= initTreeItComp(db->storage);
+	while(hasNextTreeItComp(it)){
+		
+		card* nextElem=(card*) nextTreeItComp(it);
+		destroyArtifactTree(nextElem->actualArts);
+		nextElem->actualArts=NULL;
+	}
+	destroyTreeIt(it);
+	}
 	destroyBSTreeComp(db->storage);
 	free(db);
 	}
