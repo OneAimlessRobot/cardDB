@@ -33,6 +33,7 @@ cmdstruct maincmds[] = {
                         {"printart",printart,"(TEST) Mostra arte"},
                         {"printcard",printcard,"Mostra 1 carta"},
                         {"printcardart",printcardart,"Mostra arte de 1 carta"},
+                        {"editcardart",editcardart,"Edita arte de 1 carta"},
                         {"printsize",printsize,"Mostra numero de cartas carregadas"},
                         {"sair",sair,"sair"},
                         {"showallcmds",showallcmds,"mostrar comandos disponiveis"},
@@ -216,6 +217,33 @@ void printcardart(int64_t argc,int* toExit, void** argv){
 	}
 
 }
+
+void editcardart(int64_t argc,int* toExit, void** argv){
+
+	if(loaded&&cards->storage->currSize){
+		fflush(stdin);
+		char name[CARDSMALLFIELDSIZE]={0};
+		printf("Insere nome de carta:\n");
+		fscanf(stdin,"%[^;];",name);
+		editCardArt(cards,name);
+	}
+	else{
+		
+		if(!loaded){
+		fprintf(stderr,"Cartas nao carregadas!!!!\n");
+		}
+		else if(!cards->storage->currSize){
+
+		fprintf(stderr,"Não existem cartas!!!!\n");
+		
+		}
+	}
+
+
+
+}
+
+
 void remcard(int64_t argc,int* toExit, void** argv){
         if(loaded&&cards->storage->currSize){
 		

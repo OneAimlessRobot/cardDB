@@ -31,4 +31,6 @@ void printDataBaseLess(carddatabase* db);
 
 void printCardArt(carddatabase* db,char name[CARDSMALLFIELDSIZE]);
 
+void editCardArt(carddatabase* db,char name[CARDSMALLFIELDSIZE]);
+
 #endif

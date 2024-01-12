@@ -16,6 +16,8 @@ void printart(int64_t argc,int* toExit, void** argv);
 
 void printcardart(int64_t argc,int* toExit, void** argv);
 
+void editcardart(int64_t argc,int* toExit, void** argv);
+
 void addcard(int64_t argc,int* toExit, void** argv);
 
 void addrand(int64_t argc,int* toExit, void** argv);

@@ -1,7 +1,7 @@
 #ifndef ARTIFACT_H
 #define ARTIFACT_H
-#define ARTSMALLFIELDSIZE 128
-#define ARTMIDFIELDSIZE  750
+#define ARTSMALLFIELDSIZE 250
+#define ARTMIDFIELDSIZE  1200
 #define ARTLARGEFIELDSIZE 5000
 typedef enum artifactindex {
 	

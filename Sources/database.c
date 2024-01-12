@@ -237,3 +237,27 @@ void destroyDataBase(carddatabase* db){
 	}
 
 }
+
+void editCardArt(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
+
+	card tmp= {{0},{0},{0},{0},0,0,0,{0},NULL};
+	memcpy(tmp.name,name,CARDSMALLFIELDSIZE);
+	card* found=(card*)findInBSTreeComp(db->storage, &tmp);
+	if(!found){
+		printf("No such card!!! %s N existe\n",tmp.name);
+		return;
+	}
+	char cmd[1024]={0};
+	char* ptr= cmd;
+	ptr+=snprintf(ptr,1024,"nano %s",found->artfilepath);
+	fprintf(stdout,"Carrega enter para editares as artes. Lembra-te de respeitar o formato!!!\n");
+	fscanf(stdout,"\n");
+	system(cmd);
+	destroyArtifactTree(found->actualArts);
+	FILE* fstream= fopen(found->artfilepath,"r");
+	found->actualArts=genArtifactTreeFromStream(fstream);
+	fclose(fstream);
+
+
+
+}

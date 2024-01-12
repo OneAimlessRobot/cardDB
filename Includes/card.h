@@ -1,7 +1,7 @@
 #ifndef CARD_H
 #define CARD_H
 #define CARDSMALLFIELDSIZE 128
-#define CARDMIDFIELDSIZE 128
+#define CARDMIDFIELDSIZE 500
 #define CARDLARGEFIELDSIZE 5000
 typedef struct card{
 
