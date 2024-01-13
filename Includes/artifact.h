@@ -141,11 +141,10 @@ extern comparator artCompare;
 */
 BSTreeComp* genArtifactTreeFromStream(FILE* stream);
 
-
-void printArtifact(FILE* stream,artifact* obj);
-
 void destroyArtifactTree(BSTreeComp* tree);
 
 void printArtifactTree(FILE*stream,BSTreeComp* tree);
+
+void printArtifactTreePretty(FILE*stream,BSTreeComp* tree);
 
 #endif

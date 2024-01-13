@@ -17,7 +17,7 @@
 #include "../../Includes/card.h"
 #include "../../Includes/database.h"
 #include "../Includes/maincmds.h"
-
+#include <errno.h>
 carddatabase* cards=NULL;
 BSTreeComp* testarttree=NULL;
 int loaded=0;
@@ -100,7 +100,7 @@ void printart(int64_t argc,int* toExit, void** argv){
 		}
 		else{
 
-		printArtifactTree(stdout,testarttree);
+		printArtifactTreePretty(stdout,testarttree);
 	
 		}
 }
@@ -147,7 +147,21 @@ void addcard(int64_t argc,int* toExit, void** argv){
 
 		fprintf(stdout,"insere aqui a descricao (termina em ';') (max 10000):\n");
 		fscanf(stdin,"%[^;];",addedcard->desc);
-
+		
+		
+		FILE* tmp= NULL;
+		do{
+		fprintf(stdout,"insere aqui a path para a arte:\n");
+		fscanf(stdin,"\n%[^;];",addedcard->artfilepath);
+		tmp= fopen(addedcard->artfilepath,"w");
+		if(!tmp){
+		
+    			fprintf(stderr, "can't open %s: %s\n", addedcard->artfilepath, strerror(errno));
+		}
+		printf("%s\n",addedcard->artfilepath);
+		}while(!tmp);
+		fwrite("0\n",2,1,tmp);
+		addedcard->actualArts=genArtifactTreeFromStream(tmp);
 		fprintf(stdout,"insere aqui a idade (anos):");
 		fscanf(stdin,"%lu",&addedcard->age);
 
@@ -156,10 +170,8 @@ void addcard(int64_t argc,int* toExit, void** argv){
 
 		fprintf(stdout,"insere aqui a massa (kg):");
 		fscanf(stdin,"%lu",&addedcard->weight);
-
-		fprintf(stdout,"insere aqui a path para a arte:");
-		fscanf(stdin,"%[^;];",addedcard->artfilepath);
-
+		
+		fclose(tmp);
 		addCardToDataBase(cards,addedcard);
 		free(addedcard);
 	}

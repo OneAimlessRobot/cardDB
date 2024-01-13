@@ -168,7 +168,7 @@ void printCardArt(carddatabase* db,char name[CARDSMALLFIELDSIZE]){
 		printf("No such card!!! %s N existe\n",tmp.name);
 		return;
 	}
-	printArtifactTree(stdout,found->actualArts);
+	printArtifactTreePretty(stdout,found->actualArts);
 
 
 }

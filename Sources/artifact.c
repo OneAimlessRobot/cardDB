@@ -261,7 +261,7 @@ static void printArtpiece(FILE* stream,artpiece* artobj){
 
 }
 
-void printArtifact(FILE* stream,artifact* obj){
+static void printArtifact(FILE* stream,artifact* obj){
 	fprintf(stream,"%d\n",obj->type);
 	switch(obj->type){
 		
@@ -270,6 +270,93 @@ void printArtifact(FILE* stream,artifact* obj){
 		break;
 		case ARTPIECE:
 		printArtpiece(stream,&obj->object.artobject);
+		break;
+		default:
+		break;
+		
+
+
+	}
+
+
+}
+static void printTrackPretty(FILE* stream,musictrack* track){
+
+		fprintf(stream,"Track:\n Title:  %s\nGenre: %s\nDesc: %s\n",track->title,track->genre,track->desc);
+		
+}
+static void printAlbumPretty(FILE* stream,musicalbum* album){
+
+	fprintf(stream, "Album:\nTitle: %s\n\n",album->title);
+	fprintf(stream, "Number of tracks: %lu\n",album->trackList->currSize);
+	dliteratorcomp* it= initItComp(album->trackList);
+	while(hasNextItComp(it)){
+		musictrack* track=nextItComp(it);
+		printTrackPretty(stream,track);
+		
+
+	}
+	free(it);
+}
+static void printTextPretty(FILE* stream,text* comp){
+
+		fprintf(stream,"Text:\nTitle: %s\nDesc: %s\n",comp->title,comp->desc);
+		
+}
+static void printJournalPretty(FILE* stream,journal* diary){
+
+	fprintf(stream, "Journal:\nIntro: %s\n\n",diary->intro);
+	fprintf(stream, "Number of texts: %lu\n",diary->textList->currSize);
+	dliteratorcomp* it= initItComp(diary->textList);
+	while(hasNextItComp(it)){
+		text* txt=nextItComp(it);
+		printTextPretty(stream,txt);
+		
+
+	}
+	free(it);
+
+}
+static void printPhrasePretty(FILE* stream,phrase* phr){
+
+		fprintf(stream,"%s\n",phr->desc);
+		
+}
+
+static void printArtpiecePretty(FILE* stream,artpiece* artobj){
+	
+	switch(artobj->type){
+		
+		case PHRASE:
+		printPhrasePretty(stream,&artobj->contents.quote);
+		break;
+		case TEXT:
+		printTextPretty(stream,&artobj->contents.composition);
+		break;
+		case MUSICTRACK:
+		printTrackPretty(stream,&artobj->contents.track);
+		break;
+		case MUSICALBUM:
+		printAlbumPretty(stream,&artobj->contents.album);
+		break;
+		default:
+		break;
+
+
+	}
+
+
+}
+static void printArtifactPretty(FILE* stream,artifact* obj){
+	switch(obj->type){
+		
+		case JOURNAL:
+		fprintf(stream,"Type: Journal\n");
+		printJournalPretty(stream,&obj->object.diary);
+		break;
+		case ARTPIECE:
+		fprintf(stream,"Type: Piece of Art\n");
+		printArtpiecePretty(stream,&obj->object.artobject);
 		break;
 		default:
 		break;
@@ -388,7 +475,7 @@ void printArtifactTree(FILE*stream,BSTreeComp* tree){
 }
 
 void destroyArtifactTree(BSTreeComp* tree){
-
+	if(tree){
 	if(tree->currSize){
 	treeIt* it= initTreeItComp(tree);
 	
@@ -416,6 +503,17 @@ void destroyArtifactTree(BSTreeComp* tree){
 	destroyTreeIt(it);
 	}
 	destroyBSTreeComp(tree);
+	}
 }
 
 
+void printArtifactTreePretty(FILE*stream,BSTreeComp* tree){
+	fprintf(stream,"Printing artifacts of card:\n\n");
+	treeIt* it= initTreeItComp(tree);
+	while(hasNextTreeItComp(it)){
+		
+		artifact* nextElem= (artifact*)nextTreeItComp(it);
+		printArtifactPretty(stream,nextElem);
+	}
+	destroyTreeIt(it);
+}
