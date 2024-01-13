@@ -1,8 +1,9 @@
 
-#define PROGRAMPATHAUX "/home/oar_X_I/cardDB"
-#define RESOURCES_PATH PROGRAMPATHAUX "/resources"
-#define CARDS_PATH RESOURCES_PATH "/useable.txt"
-#define CARDS_DUMP_PATH RESOURCES_PATH "/dump.txt"
+#define PROGRAMPATHAUX "/home/oar_X_I/cardDB/"
+#define RESOURCES_PATH PROGRAMPATHAUX "resources/"
+#define ARTS_PATH RESOURCES_PATH "Artifacts/"
+#define CARDS_PATH RESOURCES_PATH "useable.txt"
+#define CARDS_DUMP_PATH RESOURCES_PATH "dump.txt"
 
 #include <stdio.h>
 #include <sys/types.h>

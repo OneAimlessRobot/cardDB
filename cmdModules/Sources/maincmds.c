@@ -151,8 +151,9 @@ void addcard(int64_t argc,int* toExit, void** argv){
 		
 		FILE* tmp= NULL;
 		do{
-		fprintf(stdout,"insere aqui a path para a arte:\n");
-		fscanf(stdin,"\n%[^;];",addedcard->artfilepath);
+		fprintf(stdout,"a path para a arte:\n");
+		char* ptr=addedcard->artfilepath;
+		ptr+=snprintf(ptr,sizeof(addedcard->artfilepath),"%s%s",ARTS_PATH,addedcard->name);
 		tmp= fopen(addedcard->artfilepath,"w");
 		if(!tmp){
 		
