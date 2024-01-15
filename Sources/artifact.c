@@ -191,6 +191,48 @@ static musicalbum parseAlbum(FILE* stream){
 	return result;
 
 }
+static image parseImage(FILE* stream){
+
+
+		image newImage;
+		memset(&newImage,0,sizeof(image));
+		char* title,*imageType,*desc;
+		memset(title=newImage.title,0,ARTMIDFIELDSIZE+1);
+		memset(imageType=newImage.imageType,0,ARTMIDFIELDSIZE+1);
+		memset(desc=newImage.desc,0,ARTLARGEFIELDSIZE+1);
+		fscanf(stream,"%[^;];%[^;];%[^;];",title,imageType,desc);
+		return newImage;
+
+}
+static imagealbum parseImageAlbum(FILE* stream){
+
+	imagealbum result;
+	memset(&result,0,sizeof(imagealbum));
+	u_int64_t numOfArtifacts=0;
+	result.imgList=initDListComp(sizeof(artifact),&artCompare);
+	fscanf(stream, "%lu",&numOfArtifacts);
+	memset(result.title,0,ARTMIDFIELDSIZE+1);
+	fscanf(stream, "%[^;];",result.title);
+	result.numOfImages=numOfArtifacts;
+	for(;numOfArtifacts;numOfArtifacts--){
+		image newImage=parseImage(stream);
+		addElemToListComp2(result.imgList,(void*)&newImage);
+		
+	}
+	return result;
+
+
+}
+static skit parseSkit(FILE* stream){
+
+		skit newSkit;
+		memset(&newSkit,0,sizeof(skit));
+		memset(newSkit.title,0,ARTMIDFIELDSIZE+1);
+		memset(newSkit.desc,0,ARTLARGEFIELDSIZE+1);
+		fscanf(stream,"%[^;];%[^;];",newSkit.title,newSkit.desc);
+		return newSkit;
+
+}
 
 static void printTrack(FILE* stream,musictrack* track){
 
@@ -215,6 +257,45 @@ static void printText(FILE* stream,text* comp){
 		fprintf(stream,"%s;\n%s;\n",comp->title,comp->desc);
 		
 }
+
+
+static void printImage(FILE* stream,image*img){
+
+	fprintf(stream,"%s\n;%s;\n%s;\n",img->title,img->imageType,img->desc);
+
+
+}
+
+static void printImageAlbum(FILE* stream,imagealbum* imgalbum){
+
+
+	fprintf(stream, "%lu\n",imgalbum->imgList->currSize);
+	fprintf(stream, "%s;\n",imgalbum->title);
+	dliteratorcomp* it= initItComp(imgalbum->imgList);
+	while(hasNextItComp(it)){
+		image* img=nextItComp(it);
+		printImage(stream,img);
+		
+
+	}
+	free(it);
+
+}
+
+
+
+static void printSkit(FILE* stream,skit* sk){
+
+
+
+		fprintf(stream,"%s;\n%s;\n",sk->title,sk->desc);
+		
+
+
+}
+
+
+
 static void printJournal(FILE* stream,journal* diary){
 
 	fprintf(stream, "%lu\n",diary->textList->currSize);
@@ -251,6 +332,15 @@ static void printArtpiece(FILE* stream,artpiece* artobj){
 		break;
 		case MUSICALBUM:
 		printAlbum(stream,&artobj->contents.album);
+		break;
+		case IMAGEALBUM:
+		printImageAlbum(stream,&artobj->contents.photoalbum);
+		break;
+		case IMAGE:
+		printImage(stream,&artobj->contents.photo);
+		break;
+		case SKIT:
+		printSkit(stream,&artobj->contents.scene);
 		break;
 		default:
 		break;
@@ -323,6 +413,42 @@ static void printPhrasePretty(FILE* stream,phrase* phr){
 		
 }
 
+
+static void printImagePretty(FILE* stream,image*img){
+
+	fprintf(stream,"Image: \nTitle: %s\nImage type: %s\nDesc: %s\n",img->title,img->imageType,img->desc);
+
+
+}
+
+static void printImageAlbumPretty(FILE* stream,imagealbum* imgalbum){
+
+
+	fprintf(stream, "Image album:\nNum of images: %lu\n",imgalbum->imgList->currSize);
+	fprintf(stream, "Title: %s\n",imgalbum->title);
+	dliteratorcomp* it= initItComp(imgalbum->imgList);
+	while(hasNextItComp(it)){
+		image* img=nextItComp(it);
+		printTrack(stream,img);
+		
+
+	}
+	free(it);
+
+}
+
+
+
+static void printSkitPretty(FILE* stream,skit* sk){
+
+
+
+		fprintf(stream,"Skit:\nTitle: %s\nDesc: %s\n",sk->title,sk->desc);
+		
+
+
+}
+
 static void printArtpiecePretty(FILE* stream,artpiece* artobj){
 	
 	switch(artobj->type){
@@ -338,6 +464,15 @@ static void printArtpiecePretty(FILE* stream,artpiece* artobj){
 		break;
 		case MUSICALBUM:
 		printAlbumPretty(stream,&artobj->contents.album);
+		break;
+		case IMAGEALBUM:
+		printImageAlbumPretty(stream,&artobj->contents.photoalbum);
+		break;
+		case IMAGE:
+		printImagePretty(stream,&artobj->contents.photo);
+		break;
+		case SKIT:
+		printSkitPretty(stream,&artobj->contents.scene);
 		break;
 		default:
 		break;
@@ -416,6 +551,15 @@ static artpiece parseArtpiece(FILE* stream){
 		break;
 		case MUSICALBUM:
 		artobj.contents.album=parseAlbum(stream);
+		break;
+		case IMAGE:
+		artobj.contents.photo=parseImage(stream);
+		break;
+		case IMAGEALBUM:
+		artobj.contents.photoalbum=parseImageAlbum(stream);
+		break;
+		case SKIT:
+		artobj.contents.scene=parseSkit(stream);
 		break;
 		default:
 		break;

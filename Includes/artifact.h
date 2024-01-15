@@ -15,8 +15,10 @@ typedef enum artpieceindex {
 	PHRASE=1,
 	TEXT=2,
 	MUSICTRACK=3,
-	MUSICALBUM=4
-	
+	MUSICALBUM=4,
+	IMAGE=5,
+	IMAGEALBUM=6,
+	SKIT=7
 
 }artpieceindex;
 
@@ -33,6 +35,13 @@ typedef struct text{
 
 
 }text;
+typedef struct skit{
+
+	
+	char title[ARTMIDFIELDSIZE+1],desc[ARTLARGEFIELDSIZE+1];
+
+
+}skit;
 typedef struct phrase{
 
 	
@@ -47,7 +56,18 @@ typedef struct musicalbum{
 	DListWComp* trackList;
 
 }musicalbum;
+typedef struct image{
+	char title[ARTMIDFIELDSIZE+1],imageType[ARTMIDFIELDSIZE+1],desc[ARTLARGEFIELDSIZE+1];
 
+}image;
+
+typedef struct imagealbum{
+	
+	u_int64_t numOfImages;
+	char title[ARTMIDFIELDSIZE+1];
+	DListWComp* imgList;
+
+}imagealbum;
 typedef struct journal{
 	u_int64_t numOfTexts;
 	char intro[ARTLARGEFIELDSIZE+1];
@@ -69,6 +89,9 @@ typedef union untypedartpiece{
 	struct musicalbum album;
 	struct text composition;
 	struct phrase quote;
+	struct imagealbum photoalbum;
+	struct image photo;
+	struct skit scene;
 }untypedartpiece;
 
 
